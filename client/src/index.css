@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-slate-300 text-neutral-600 dark:bg-neutral-800 dark:text-slate-100;
+}
+
+/* AdminLayout Styles */
+.admin__layout {
+  @apply grid grid-cols-[minmax(auto,_200px)_1fr];
+}
+
+/* Aside Styles */
+.aside {
+  @apply bg-slate-200 sticky inset-0 transition-all shadow-lg dark:bg-neutral-800 h-[100vh];
+}
+
+.aside__wrapper {
+  @apply p-4 flex justify-center flex-col gap-3;
+}
+
+.aside__wrapper__item {
+  @apply rounded-md hover:bg-slate-100 transition-all dark:hover:bg-neutral-600 hover:text-green-400 hover:shadow-lg p-3;
+}
+.aside__wrapper > .active {
+  @apply bg-slate-100 dark:bg-neutral-600 text-green-400 shadow-lg;
+}
+
+/* Main Styles */
+.main {
+  @apply m-auto w-full p-4;
+}
+
+/* PostsCards Styles */
+.posts__wrapper {
+  @apply flex justify-center gap-6 flex-wrap py-4 px-2;
+}
+
+.post__card {
+  @apply max-w-xs flex flex-col gap-2 p-4  rounded-md shadow-lg text-center bg-slate-100   dark:bg-neutral-600;
+}
+
+.post__card--private {
+  @apply max-w-md flex gap-2 p-4  rounded-md shadow-lg bg-slate-100   dark:bg-neutral-600;
+}
+
+.post__card__img {
+  @apply object-cover aspect-video;
+}
+
+.btn {
+  @apply px-2 py-1 transition-all rounded-md;
+}
+.btn__edit {
+  @apply bg-green-600 hover:bg-green-500;
+}
+.btn__delete {
+  @apply bg-red-600 hover:bg-red-500;
+}
+.btn__save {
+  @apply bg-indigo-600 hover:bg-indigo-500;
+}
+
+/* Form Editor */
+
+.form__editor {
+  @apply flex flex-col gap-2 w-full p-4 items-center justify-center;
+}
+
+.form__editor__title {
+  @apply w-full py-2 px-5;
+}
+
+.form__editor__descrip {
+  @apply bg-[#414141] w-full min-w-full max-w-2xl min-h-[150px] max-h-80 overflow-y-auto py-2 px-5;
+}
+
+.floatModal {
+  @apply m-auto rounded-md border-none;
+}
+
+.floatModal::backdrop {
+  @apply backdrop-blur-sm bg-[#00000035];
+}
+
+/* Img Item Uploa */
+.cont__img {
+  @apply w-40 h-60 m-auto flex flex-wrap justify-center py-4 relative transition-all;
+}
+.cont__img:hover > .btn__img__interact {
+  @apply z-[1] opacity-100;
+}
+.btn__img__interact {
+  @apply absolute inset-[-5px_-5px_auto_auto] transition-all shadow-lg opacity-0 z-[-1];
+}
+
+/* Uploa */
+.section__upload__tabs {
+  @apply flex items-center;
+}
+.section__upload__tab {
+  @apply p-2 transition-all hover:bg-neutral-600;
+}
+.section__upload__tabs .active {
+  @apply bg-neutral-600;
+}
+
+.wrapper__items__upload {
+  @apply min-h-[200px] grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-5 p-4 bg-neutral-600;
+}
+
+/* Loader Component */
+.wrap__loader {
+  @apply w-full h-full bg-[#00000090] absolute inset-0 z-0 backdrop-blur-[1px] hidden;
+}
+
+.wrap__loader--show {
+  display: flex;
+}
+
+.loader {
+  @apply w-[80px] h-[80px] rounded-full m-auto z-[1];
+  border: 5px solid #ffffff;
+  border-top-color: transparent;
+  animation: loader 1s linear infinite;
+  transition: all 500ms ease-in-out;
+}
+
+@keyframes loader {
+  to {
+    transform: rotate(1turn);
+  }
+}
