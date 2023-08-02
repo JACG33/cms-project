@@ -4,6 +4,7 @@ import { Loader } from "../../../components/Loader";
 import { IMG_PlACEHOLDER, acceptedFiles } from "../../../config/constans";
 import { SliceText } from "../../../helpers/strings";
 import { delet, get, post } from "../../../services";
+import ModalUpload from "./ModalUpload";
 
 let filesToUpload;
 let tmpFiles = [];
@@ -17,26 +18,46 @@ const Uploads = () => {
   const [zips, setZips] = useState([]);
   const [typeFileAccept, setTypeFileAccept] = useState(acceptedFiles);
   const [loading, setLoading] = useState(false);
+  const [errorUpload, setErrorUpload] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    if (openModal) setErrorUpload([]);
+    setOpenModal(!openModal);
+  };
 
   const handleFile = () => fileRef.current.click();
+
   const handleChangeFile = (e) => {
     let file = e.target.files;
+    let tmpErros = [];
     filesToUpload = Array.from(file);
     if (file.length >= 1) {
       setLoading(true);
-      filesToUpload.map((ele) =>
+      filesToUpload.map((file) => {
+        if (file.size > 1572864) {
+          tmpErros.push(
+            `El archivo ${file.name} supera los 1.5mb y no podra ser subido`
+          );
+        }
         tmpFiles.push({
           id: 0,
           path: IMG_PlACEHOLDER,
-          nameFile: ele.name,
+          nameFile: file.name,
           typeFile: "image",
-          sizeFile: `{"small":"${URL.createObjectURL(ele)}"}`,
-          nameFileSlice: SliceText(ele.name),
-        })
-      );
-      saveFile(file, filesToUpload);
+          sizeFile: `{"small":"${URL.createObjectURL(file)}"}`,
+          nameFileSlice: SliceText(file.name),
+        });
+      });
+      if (tmpErros.length == 0) return saveFile(file, filesToUpload);
+      handleError(tmpErros);
+      setLoading(false);
+      fileRef.current.value = null;
+      tmpFiles = [];
     }
   };
+
+  const handleError = (name) => setErrorUpload(name);
 
   const handleTypeFile = (ext, type) =>
     setTypeFileAccept({ accept: ext, type });
@@ -57,9 +78,7 @@ const Uploads = () => {
 
   const saveFile = async (file, filesToUpload) => {
     let form = new FormData();
-    if (file.length > 1) {
-      filesToUpload.map((ele) => form.append("file", ele));
-    } else form.append("file", file[0]);
+    form.append("file", file);
 
     let json = await post({ file, filesToUpload });
     tmpFiles = tmpFiles.map((ele, ind) => ({
@@ -67,11 +86,10 @@ const Uploads = () => {
       id: json[ind].id,
       path: json[ind].path,
     }));
-    setTimeout(() => {
-      fileRef.current.value = null;
-      setLoading(false);
-      actionsOfModifyFiles("save", typeFileAccept.type);
-    }, 1000);
+
+    actionsOfModifyFiles("save", typeFileAccept.type);
+    fileRef.current.value = null;
+    setLoading(false);
   };
 
   const deleteFile = async (id) => {
@@ -83,8 +101,11 @@ const Uploads = () => {
 
   const getFiles = async () => {
     let json = await get({ typeFile: typeFileAccept.type });
-    console.log(json);
     if (!json.error) {
+      json = json.map((ele) => ({
+        ...ele,
+        nameFileSlice: SliceText(ele.nameFile),
+      }));
       if (typeFileAccept.type == "image") setImages(json);
       if (typeFileAccept.type == "zips") setZips(json);
       if (typeFileAccept.type == "docs") setPdfs(json);
@@ -95,17 +116,23 @@ const Uploads = () => {
 
   useEffect(() => {
     if (pathname == "/admin/uploads/pdf")
-      setTypeFileAccept({ accept: "application/pdf", type: "docs" });
+      handleTypeFile("application/pdf", "docs");
     if (pathname == "/admin/uploads/comprimidos")
-      setTypeFileAccept({ accept: "application/, .zip, .rar", type: "zips" });
-    if (pathname == "/admin/uploads")
-      setTypeFileAccept({ accept: "application/pdf", type: "docs" });
-  }, [pathname]);
+      handleTypeFile("application/, .zip, .rar", "zips");
+    if (pathname == "/admin/uploads/imagenes")
+      handleTypeFile("image/, .jpeg, .jpg, .png, .gif", "image");
+    if (errorUpload.length > 0) handleOpenModal();
+  }, [pathname, errorUpload]);
 
   if (pathname == "/admin/uploads")
     return <Navigate to={"/admin/uploads/imagenes"} />;
   return (
     <div className="p-5">
+      <ModalUpload
+        errorUpload={errorUpload}
+        handleOpenModal={handleOpenModal}
+        openModal={openModal}
+      />
       <div className="py-5">
         <input
           type="file"

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import Item from "./Item";
 import SectionUpload from "./SectionUpload";
-import { useOutletContext } from "react-router-dom";
 
 const Imagenes = () => {
   const { filesContentRef, images, getFiles } =
@@ -9,7 +9,6 @@ const Imagenes = () => {
 
   useEffect(() => {
     if (images.length == 0) getFiles();
-    console.log(images);
   }, []);
   return (
     <SectionUpload filesContentRef={filesContentRef}>

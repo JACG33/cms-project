@@ -1,7 +1,7 @@
-import { useOutletContext } from "react-router-dom";
-import SectionUpload from "./SectionUpload";
 import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import Item from "./Item";
+import SectionUpload from "./SectionUpload";
 
 const Comprimidos = () => {
   const { filesContentRef, zips, getFiles } = useOutletContext();

@@ -21,7 +21,7 @@ const Item = ({ id, src, alt, filename, path }) => {
       </button>
       <img
         loading="lazy"
-        className="w-40 h-40 m-auto object-cover"
+        className="h-40 m-auto object-cover"
         src={src}
         alt={alt}
       />

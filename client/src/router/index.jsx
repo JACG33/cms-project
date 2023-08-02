@@ -1,7 +1,13 @@
 import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { Loader } from "../components/Loader";
 import { PrivateLayout } from "../layouts/PrivateLayout";
+import { PublicLayout } from "../layouts/PublicLayout";
 import Admin from "../pages/Private/Admin";
+import SectionUpload from "../pages/Private/uploads/SectionUpload";
+import Uploads from "../pages/Private/uploads/Uploads";
+import Home from "../pages/Public/Home";
+import SinglePost from "../pages/Public/SinglePost";
 const Contenido = lazy(() => import("../pages/Private/contenido/Contenido"));
 const AddContenido = lazy(() =>
   import("../pages/Private/contenido/AddContenido")
@@ -9,13 +15,7 @@ const AddContenido = lazy(() =>
 const EditContenido = lazy(() =>
   import("../pages/Private/contenido/EditContenido")
 );
-import Uploads from "../pages/Private/uploads/Uploads";
-import { PublicLayout } from "../layouts/PublicLayout";
-import Home from "../pages/Public/Home";
-import SinglePost from "../pages/Public/SinglePost";
-import SectionUpload from "../pages/Private/uploads/SectionUpload";
-import { Loader } from "../components/Loader";
-
+const Categories = lazy(() => import("../pages/Private/categories/Categories"));
 const Imagenes = lazy(() => import("../pages/Private/uploads/Imagenes"));
 const Pdf = lazy(() => import("../pages/Private/uploads/Pdf"));
 const Comprimidos = lazy(() => import("../pages/Private/uploads/Comprimidos"));
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       {
         path: "contenido",
         element: (
-          <Suspense fallback={<Loader/>}>
+          <Suspense fallback={<Loader />}>
             <Contenido />
           </Suspense>
         ),
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       {
         path: "addcontenido",
         element: (
-          <Suspense fallback={<Loader/>}>
+          <Suspense fallback={<Loader />}>
             <AddContenido />
           </Suspense>
         ),
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       {
         path: "editcontenido/:id",
         element: (
-          <Suspense fallback={<Loader/>}>
+          <Suspense fallback={<Loader />}>
             <EditContenido />
           </Suspense>
         ),
@@ -82,6 +82,14 @@ const router = createBrowserRouter([
             ),
           },
         ],
+      },
+      {
+        path: "categorias",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Categories />
+          </Suspense>
+        ),
       },
     ],
   },

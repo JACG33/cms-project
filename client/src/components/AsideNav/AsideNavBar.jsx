@@ -8,6 +8,7 @@ const AsideNavBar = () => {
         <NavLink className={"aside__wrapper__item "} to={"contenido"}>Contenido</NavLink>
         <NavLink className={"aside__wrapper__item "} to={"addcontenido"} >Añadir Contenido</NavLink>
         <NavLink className={"aside__wrapper__item "} to={"uploads"} >Uploads</NavLink>
+        <NavLink className={"aside__wrapper__item "} to={"categorias"} >Categorias</NavLink>
       </ul>
     </aside>
   )

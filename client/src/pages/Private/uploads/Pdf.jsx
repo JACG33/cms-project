@@ -1,14 +1,13 @@
-import { useOutletContext } from "react-router-dom";
-import SectionUpload from "./SectionUpload";
 import { useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import Item from "./Item";
+import SectionUpload from "./SectionUpload";
 
 const Pdf = () => {
   const { filesContentRef, pdfs, getFiles } = useOutletContext();
 
   useEffect(() => {
     if (pdfs.length == 0) getFiles();
-    console.log(pdfs);
   }, []);
   return (
     <SectionUpload filesContentRef={filesContentRef}>

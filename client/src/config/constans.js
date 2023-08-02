@@ -8,6 +8,12 @@ export const nullForm = {
   img: "/imgs/img5.jpg",
 };
 
+export const FormCategories = {
+  id: "",
+  name: "",
+  slug:""
+}
+
 export const acceptedFiles = {
   accept: "image/, .jpeg, .jpg, .png, .gif",
   type: "image",

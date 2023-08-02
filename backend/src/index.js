@@ -1,10 +1,11 @@
 // Import Dependencies
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import cors from "cors";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+import RouterApiCategories from "./routes/apiCategories.routes.js";
 import RouerApiPosts from "./routes/apiPosts.routes.js";
 import RouterApiUploads from "./routes/apiUploads.routes.js";
 
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Express Routes
-app.use(RouerApiPosts, RouterApiUploads);
+app.use(RouerApiPosts, RouterApiUploads, RouterApiCategories);
 app.use("/uploads", express.static(join(__dirname, "uploads")));
 /* app.use(
   [
