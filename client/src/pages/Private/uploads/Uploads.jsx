@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { API_URL, acceptedFiles } from "../../../config/constans";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
 import { Loader } from "../../../components/Loader";
+import { IMG_PlACEHOLDER, acceptedFiles } from "../../../config/constans";
 import { SliceText } from "../../../helpers/strings";
+import { delet, get, post } from "../../../services";
 
-let fileimg;
+let filesToUpload;
 let tmpFiles = [];
 
 const Uploads = () => {
@@ -20,34 +21,21 @@ const Uploads = () => {
   const handleFile = () => fileRef.current.click();
   const handleChangeFile = (e) => {
     let file = e.target.files;
-    fileimg = Array.from(file);
-    setLoading(true);
-    if (file.length > 1) {
-      fileimg.map((ele) => {
-        let tmpUrl = URL.createObjectURL(ele);
-
+    filesToUpload = Array.from(file);
+    if (file.length >= 1) {
+      setLoading(true);
+      filesToUpload.map((ele) =>
         tmpFiles.push({
           id: 0,
-          path: "http://localhost:3000/uploads/images/crear_noticia_categoria-1690655174230.png",
+          path: IMG_PlACEHOLDER,
           nameFile: ele.name,
           typeFile: "image",
-          sizeFile: `{"small":"${tmpUrl}"}`,
+          sizeFile: `{"small":"${URL.createObjectURL(ele)}"}`,
           nameFileSlice: SliceText(ele.name),
-        });
-      });
-    } else {
-      let tmpUrl = URL.createObjectURL(file[0]);
-
-      tmpFiles.push({
-        id: 0,
-        path: "http://localhost:3000/uploads/images/crear_noticia_categoria-1690655174230.png",
-        nameFile: file[0].name,
-        typeFile: "image",
-        sizeFile: `{"small":"${tmpUrl}"}`,
-        nameFileSlice: SliceText(file[0].name),
-      });
+        })
+      );
+      saveFile(file, filesToUpload);
     }
-    if (file.length > 0) saveFile(file);
   };
 
   const handleTypeFile = (ext, type) =>
@@ -67,74 +55,39 @@ const Uploads = () => {
     }
   };
 
-  const saveFile = async (file) => {
+  const saveFile = async (file, filesToUpload) => {
     let form = new FormData();
     if (file.length > 1) {
-      fileimg = Array.from(file);
-      fileimg.map((ele) => form.append("file", ele));
+      filesToUpload.map((ele) => form.append("file", ele));
     } else form.append("file", file[0]);
 
-    try {
-      let solic = await fetch(`${API_URL}uploads/`, {
-        method: "POST",
-        body: form,
-      });
-
-      if (!solic.ok) throw await solic.json();
-      let json = await solic.json();
-      tmpFiles = tmpFiles.map((ele, ind) => ({
-        ...ele,
-        id: json[ind].id,
-        path: json[ind].path,
-      }));
-      setTimeout(() => {
-        fileRef.current.value = null;
-        setLoading(false);
-        actionsOfModifyFiles("save", typeFileAccept.type);
-      }, 1000);
-    } catch (error) {
-      console.log(error);
-    }
+    let json = await post({ file, filesToUpload });
+    tmpFiles = tmpFiles.map((ele, ind) => ({
+      ...ele,
+      id: json[ind].id,
+      path: json[ind].path,
+    }));
+    setTimeout(() => {
+      fileRef.current.value = null;
+      setLoading(false);
+      actionsOfModifyFiles("save", typeFileAccept.type);
+    }, 1000);
   };
 
-  const deleteFile = (id) => {
-    return fetch(`${API_URL}uploads/${id}`, {
-      headers: {
-        "X-type-file": typeFileAccept.type,
-      },
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        actionsOfModifyFiles("delete", typeFileAccept.type, id);
-        setLoading(false);
-        return Promise.resolve(res);
-      });
+  const deleteFile = async (id) => {
+    let json = await delet({ id, typeFile: typeFileAccept.type });
+    actionsOfModifyFiles("delete", typeFileAccept.type, id);
+    setLoading(false);
+    return Promise.resolve(json);
   };
 
   const getFiles = async () => {
-    try {
-      let solic = await fetch(`${API_URL}uploads/`, {
-        method: "GET",
-        headers: {
-          "X-type-file": typeFileAccept.type,
-        },
-      });
-      if (!solic.ok) throw await solic.json();
-
-      let json = await solic.json();
-      json = json.map((ele) => {
-        let nameFileSlice = SliceText(ele.nameFile);
-        return {
-          ...ele,
-          nameFileSlice,
-        };
-      });
+    let json = await get({ typeFile: typeFileAccept.type });
+    console.log(json);
+    if (!json.error) {
       if (typeFileAccept.type == "image") setImages(json);
       if (typeFileAccept.type == "zips") setZips(json);
       if (typeFileAccept.type == "docs") setPdfs(json);
-    } catch (error) {
-      console.log("error+++++++", error);
     }
   };
 
@@ -147,7 +100,7 @@ const Uploads = () => {
       setTypeFileAccept({ accept: "application/, .zip, .rar", type: "zips" });
     if (pathname == "/admin/uploads")
       setTypeFileAccept({ accept: "application/pdf", type: "docs" });
-  }, []);
+  }, [pathname]);
 
   if (pathname == "/admin/uploads")
     return <Navigate to={"/admin/uploads/imagenes"} />;
