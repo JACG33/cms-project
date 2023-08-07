@@ -4,29 +4,30 @@ import Item from "./Item";
 import SectionUpload from "./SectionUpload";
 
 const Pdf = () => {
-  const { filesContentRef, pdfs, getFiles } = useOutletContext();
+	const { filesContentRef, getFiles, typeFileAccept, fileStorage } =
+		useOutletContext();
 
-  useEffect(() => {
-    if (pdfs.length == 0) getFiles();
-  }, []);
-  return (
-    <SectionUpload filesContentRef={filesContentRef}>
-      {pdfs.length > 0 ? (
-        pdfs.map((file, index) => (
-          <Item
-            key={index}
-            id={file.id}
-            src={"/img/filetext.svg"}
-            alt={file.nameFile}
-            filename={file.nameFileSlice}
-            path={file.path}
-          />
-        ))
-      ) : (
-        <h2>No hay pdfs cargadas</h2>
-      )}
-    </SectionUpload>
-  );
+	useEffect(() => {
+		if (fileStorage[typeFileAccept.type]?.length === 0) getFiles();
+	}, []);
+	return (
+		<SectionUpload filesContentRef={filesContentRef}>
+			{fileStorage[typeFileAccept.type]?.length > 0 ? (
+				fileStorage[typeFileAccept.type]?.map((file) => (
+					<Item
+						key={file.id}
+						id={file.id}
+						src={"/img/filetext.svg"}
+						alt={file.nameFile}
+						filename={file.nameFileSlice}
+						path={file.path}
+					/>
+				))
+			) : (
+				<h2>No hay pdfs cargadas</h2>
+			)}
+		</SectionUpload>
+	);
 };
 
 export default Pdf;

@@ -4,7 +4,7 @@ const PostCard = ({ title,imgsrc, id, excerpt}) => {
   return (
     <div className="post__card">
       {imgsrc && <img src={imgsrc} alt={title} className="post__card__img" />}
-      <h3>{title}</h3>
+      <h1>{title}</h1>
       <p>{excerpt}</p>
       {id && (
         <div className="flex gap-2 items-center justify-evenly">

@@ -4,30 +4,30 @@ import Item from "./Item";
 import SectionUpload from "./SectionUpload";
 
 const Imagenes = () => {
-  const { filesContentRef, images, getFiles } =
-    useOutletContext();
+	const { filesContentRef, getFiles, typeFileAccept, fileStorage } =
+		useOutletContext();
 
-  useEffect(() => {
-    if (images.length == 0) getFiles();
-  }, []);
-  return (
-    <SectionUpload filesContentRef={filesContentRef}>
-      {images.length > 0 ? (
-        images.map((file, index) => (
-          <Item
-            key={index}
-            id={file.id}
-            src={JSON.parse(file.sizeFile).small}
-            alt={file.nameFile}
-            filename={file.nameFileSlice}
-            path={file.path}
-          />
-        ))
-      ) : (
-        <h2>No hay images cargadas</h2>
-      )}
-    </SectionUpload>
-  );
+	useEffect(() => {
+		if (fileStorage[typeFileAccept.type]?.length === 0) getFiles();
+	}, []);
+	return (
+		<SectionUpload filesContentRef={filesContentRef}>
+			{fileStorage[typeFileAccept.type]?.length > 0 ? (
+				fileStorage[typeFileAccept.type]?.map((file) => (
+					<Item
+						key={file.id}
+						id={file.id}
+						src={JSON.parse(file.sizeFile).small}
+						alt={file.nameFile}
+						filename={file.nameFileSlice}
+						path={file.path}
+					/>
+				))
+			) : (
+				<h2>No hay images cargadas</h2>
+			)}
+		</SectionUpload>
+	);
 };
 
 export default Imagenes;

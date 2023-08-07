@@ -12,6 +12,40 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* Re-Reset Headings Tags */
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.17em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: .83em;
+}
+
+h5 {
+  font-size: .67em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+}
+
 body {
   @apply bg-slate-300 text-neutral-600 dark:bg-neutral-800 dark:text-slate-100;
 }
@@ -33,7 +67,8 @@ body {
 .aside__wrapper__item {
   @apply rounded-md hover:bg-slate-100 transition-all dark:hover:bg-neutral-600 hover:text-green-400 hover:shadow-lg p-3;
 }
-.aside__wrapper > .active {
+
+.aside__wrapper>.active {
   @apply bg-slate-100 dark:bg-neutral-600 text-green-400 shadow-lg;
 }
 
@@ -48,11 +83,11 @@ body {
 }
 
 .post__card {
-  @apply max-w-xs flex flex-col gap-2 p-4  rounded-md shadow-lg text-center bg-slate-100   dark:bg-neutral-600;
+  @apply max-w-xs flex flex-col gap-2 p-4 rounded-md shadow-lg text-center bg-slate-100 dark:bg-neutral-600;
 }
 
 .post__card--private {
-  @apply max-w-md flex gap-2 p-4  rounded-md shadow-lg bg-slate-100   dark:bg-neutral-600;
+  @apply max-w-md flex gap-2 p-4 rounded-md shadow-lg bg-slate-100 dark:bg-neutral-600;
 }
 
 .post__card__img {
@@ -62,12 +97,15 @@ body {
 .btn {
   @apply px-2 py-1 transition-all rounded-md;
 }
+
 .btn__edit {
   @apply bg-green-600 hover:bg-green-500;
 }
+
 .btn__delete {
   @apply bg-red-600 hover:bg-red-500;
 }
+
 .btn__save {
   @apply bg-indigo-600 hover:bg-indigo-500;
 }
@@ -75,15 +113,15 @@ body {
 /* Form Editor */
 
 .form__editor {
-  @apply flex flex-col gap-2 w-full p-4 items-center justify-center;
+  @apply flex gap-4 w-full p-4 justify-center;
 }
 
 .form__editor__title {
-  @apply w-full py-2 px-5;
+  @apply w-full py-2 px-5 rounded-lg;
 }
 
 .form__editor__descrip {
-  @apply bg-[#414141] w-full min-w-full max-w-2xl min-h-[150px] max-h-80 overflow-y-auto py-2 px-5;
+  @apply bg-[#414141] w-full min-w-full max-w-2xl min-h-[230px] max-h-80 overflow-y-auto py-2 px-5;
 }
 
 .floatModal {
@@ -98,9 +136,11 @@ body {
 .cont__img {
   @apply w-40 h-60 m-auto flex flex-wrap justify-center py-4 relative transition-all;
 }
-.cont__img:hover > .btn__img__interact {
+
+.cont__img:hover>.btn__img__interact {
   @apply z-[1] opacity-100;
 }
+
 .btn__img__interact {
   @apply absolute inset-[-5px_-5px_auto_auto] transition-all shadow-lg opacity-0 z-[-1];
 }
@@ -109,9 +149,11 @@ body {
 .section__upload__tabs {
   @apply flex items-center;
 }
+
 .section__upload__tab {
   @apply p-2 transition-all hover:bg-neutral-600;
 }
+
 .section__upload__tabs .active {
   @apply bg-neutral-600;
 }
