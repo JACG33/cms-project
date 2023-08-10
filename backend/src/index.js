@@ -1,10 +1,10 @@
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 // Import Dependencies
 import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
 import RouterApiCategories from "./routes/apiCategories.routes.js";
 import RouerApiPosts from "./routes/apiPosts.routes.js";
 import RouterApiUploads from "./routes/apiUploads.routes.js";
@@ -25,20 +25,22 @@ app.use(express.urlencoded({ extended: true }));
 // Express Routes
 app.use(RouerApiPosts, RouterApiUploads, RouterApiCategories);
 app.use("/uploads", express.static(join(__dirname, "uploads")));
-/* app.use(
-  [
-    "/admin",
-    "/admin/addcontenido",
-    "/admin/editcontenido",
-    "/admin/uploads/imagenes",
-    "/admin/uploads/pdf",
-    "/admin/uploads/comprimidos",
-    "/",
-  ],
-  express.static(join(__dirname, "dist"))
-); */
+app.use(
+	[
+		"/admin/contenido",
+		"/admin/categorias",
+		"/admin/addcontenido",
+		"/admin/editcontenido",
+		"/admin/uploads/imagenes",
+		"/admin/uploads/pdf",
+		"/admin/uploads/comprimidos",
+		"/admin",
+		"/",
+	],
+	express.static(join(__dirname, "dist/")),
+);
 
 // Express Server Up
 app.listen(PORT, () => {
-  console.log(`Server up on port http://localhost:${PORT}`);
+	console.log(`Server up on port http://localhost:${PORT}`);
 });

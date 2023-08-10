@@ -88,16 +88,7 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 						placeholder="Titulo Contenido"
 					/>
 					<div className="rounded-lg overflow-hidden">
-						<ToolsTextEditor />
-						<div
-							contentEditable
-							className="form__editor__descrip"
-							name="descrip"
-							id="descrip"
-							onKeyUp={handleChange}
-							ref={bodyContentRef}
-							dangerouslySetInnerHTML={mark}
-						/>
+						<ToolsTextEditor bodyContentRef={bodyContentRef} handleChange={handleChange} mark={mark} />
 					</div>
 				</div>
 				<div className="flex flex-col gap-4">

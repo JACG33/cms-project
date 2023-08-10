@@ -1,5 +1,9 @@
 # CMS
 
+## Version 1.1.1
++ Updated Tools Editor, migrate __Div ContentEditable__ element to ToolsTextEditor Component.
++ Now Tools Editor have a __Select Button__, to order text selected in any list (currently have two types list).
+
 ## Version 1.1.0
 + Updated Tools Editor, now you can select multiple lines of text and choose any of the headers
 

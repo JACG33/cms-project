@@ -22,11 +22,13 @@ export const ModalForm = ({ openModal, bodyContentRef, handleOpenModal }) => {
 		if (fileSelected !== "") {
 			const fileSize = JSON.parse(fileSelected.sizes)[imgSize];
 			bodyContentRef.current.innerHTML += `
-			<a href="${fileSelected.src}" target="_blank" rel="noopener noreferrer">
-				<img src="${fileSize}" alt="${fileSelected.alt}" class="cursor-pointer"  data-edit="img"/>
-			</a>
 			<p><br/></p>
+			<a href="${fileSelected.src}" target="_blank" rel="noopener noreferrer">
+				<img src="${fileSize}" alt="${fileSelected.alt}" class="cursor-pointer" style="display: block;margin-left: auto; margin-right: auto;" data-edit="img"/>
+			</a>
+			<p><br/>...</p>
 			`;
+			bodyContentRef.current.scrollTop = 9000 * 9
 			handleOpenModal();
 		}
 	};

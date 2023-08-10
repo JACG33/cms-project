@@ -1,11 +1,11 @@
 export const ToolsEditor = () => {
 	let imgAlign;
 	let parent;
-	let textSelect;
 	let basnd;
 	let extnd;
 	let childrenOfSelection = [];
 	const cssSelectedImg = ["outline-offset-3", "outline", "outline-green-500"];
+	const classAlign = ["text-right", "text-left", "text-center", "text-justify"];
 
 	const findItems = () => {
 		if (basnd !== extnd) {
@@ -18,9 +18,7 @@ export const ToolsEditor = () => {
 			});
 			childrenOfSelection.forEach((ele, ind) => {
 				if (ele.textContent === basnd.textContent) items.push(ele);
-
 				if (ind > startPos && ind < endPos) items.push(ele);
-
 				if (ele.textContent === extnd.textContent) items.push(ele);
 			});
 			return items;
@@ -28,12 +26,32 @@ export const ToolsEditor = () => {
 	};
 
 	const generateTag = ({ type }) => {
-		findItems().forEach((ele) => {
+		if (type === "ul" || type === "ol") {
+			const find = findItems();
 			const tag = document.createElement(type);
-			tag.textContent = ele.textContent;
-			ele.replaceWith(tag);
+			findItems().forEach((ele) => {
+				const li = document.createElement("li");
+				li.textContent = ele.textContent;
+				tag.append(li);
+				ele.replaceWith(tag);
+			});
+		} else {
+			findItems().forEach((ele) => {
+				const tag = document.createElement(type);
+				tag.textContent = ele.textContent;
+				ele.replaceWith(tag);
+			});
+		}
+	};
+
+	const alignText = ({ align }) => {
+		const find = findItems();
+		find.forEach((ele) => {
+			ele.classList.remove(...classAlign);
+			ele.classList.add(`text-${align}`);
 		});
 	};
+
 	document.addEventListener("click", (e) => {
 		const { target } = e;
 		if (target.dataset.edit === "img") {
@@ -48,18 +66,10 @@ export const ToolsEditor = () => {
 		if (target.matches("#left")) {
 			if (imgAlign)
 				return imgAlign.setAttribute("style", "float:left;margin-right:15px;");
-			if (parent) {
-				parent.className = "";
-				parent.classList.add("text-left");
-			}
 		}
 		if (target.matches("#right")) {
 			if (imgAlign)
 				return imgAlign.setAttribute("style", "float:right;margin-left:15px;");
-			if (parent) {
-				parent.className = "";
-				parent.classList.add("text-right");
-			}
 		}
 		if (target.matches("#center")) {
 			if (imgAlign)
@@ -67,16 +77,6 @@ export const ToolsEditor = () => {
 					"style",
 					"display: block;margin-left: auto; margin-right: auto;",
 				);
-			if (parent) {
-				parent.className = "";
-				parent.classList.add("text-center");
-			}
-		}
-		if (target.matches("#justify")) {
-			if (parent) {
-				parent.className = "";
-				parent.classList.add("text-justify");
-			}
 		}
 		if (target.matches("#bold")) {
 			if (parent) {
@@ -88,37 +88,19 @@ export const ToolsEditor = () => {
 				parent.classList.toggle("italic");
 			}
 		}
-		if (
-			target.localName.match(/p|h2|h3|h4|h5|h6/) &&
-			target.innerText !== "\n"
-		) {
-			parent = target;
-			textSelect = target.innerText;
+		if (target.dataset.btn === "align") {
+			alignText({ align: target.dataset.align });
 		}
 	});
 
 	document.addEventListener("change", (e) => {
 		const target = e.target;
-		if (target.matches("#typeTag") && parent != null && textSelect !== "") {
-			generateTag({ type: target.value });
-		}
+		if (target.matches("#heading")) generateTag({ type: target.value });
+		if (target.matches("#list")) generateTag({ type: target.value });
 	});
 
 	document.addEventListener("selectionchange", (e) => {
 		const { anchorNode, baseNode, extentNode } = window.getSelection();
-		basnd = baseNode;
-		extnd = extentNode;
-		if (
-			window.getSelection().getRangeAt(0).commonAncestorContainer.childNodes
-				.length !== 0
-		)
-			childrenOfSelection = window.getSelection().getRangeAt(0)
-				.commonAncestorContainer.childNodes;
-		else
-			childrenOfSelection = [
-				window.getSelection().getRangeAt(0).commonAncestorContainer
-					.parentElement,
-			];
 		if (
 			anchorNode.localName?.match(/div/) &&
 			anchorNode.outerHTML === "<div><br></div>"
@@ -128,9 +110,21 @@ export const ToolsEditor = () => {
 			anchorNode.replaceWith(p);
 		}
 		if (anchorNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6/)) {
-			textSelect = window.getSelection().toString();
-			textSelect = textSelect.split("\n").filter((ele) => ele !== "");
 			parent = anchorNode.parentElement;
+
+			basnd = baseNode;
+			extnd = extentNode;
+			if (
+				window.getSelection().getRangeAt(0).commonAncestorContainer.childNodes
+					.length !== 0
+			)
+				childrenOfSelection = window.getSelection().getRangeAt(0)
+					.commonAncestorContainer.childNodes;
+			else
+				childrenOfSelection = [
+					window.getSelection().getRangeAt(0).commonAncestorContainer
+						.parentElement,
+				];
 		}
 	});
 
