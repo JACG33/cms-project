@@ -17,24 +17,17 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 
 	const handleChange = (e) => {
 		const { name, id, value, innerHTML, innerText } = e.target;
-		if (bodyContentRef.current.innerHTML == "")
+		if (bodyContentRef.current.innerHTML === "")
 			bodyContentRef.current.innerHTML = "<p></br></p>";
 		setFormPost({
 			...formPost,
 			[name || id]: value || innerHTML,
-			excerpt: id == "descrip" ? innerText.slice(0, 150) : formPost.excerpt,
-			slug: id == "title" ? value.trim().split(" ").join("-") : formPost.slug,
+			excerpt: id === "descrip" ? innerText.slice(0, 150) : formPost.excerpt,
+			slug: id === "title" ? value.trim().split(" ").join("-") : formPost.slug,
 		});
 	};
 
 	const editPost = () => {
-		/* let form = new FormData();
-    form.append("_method", "put");
-    form.append("data", JSON.stringify(formPost));
-    fetch(`${API_URL}posts`, {
-      method: "POST",
-      body: form,
-    }) */
 		fetch(`${API_URL}posts/${formPost.id}`, {
 			method: "PUT",
 			headers: { "content-type": "application/json" },
@@ -45,12 +38,6 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 	};
 
 	const savePost = () => {
-		/* let form = new FormData();
-    form.append("data", JSON.stringify(formPost));
-    fetch(`${API_URL}posts`, {
-      method: "POST",
-      body: form,
-    }) */
 		fetch(`${API_URL}posts`, {
 			method: "POST",
 			headers: { "content-type": "application/json" },
@@ -60,17 +47,20 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 			.then((res) => console.log(res));
 	};
 
-	const resetForm = () => {setFormPost(nullForm);bodyContentRef.current.innerHTML = null};
+	const resetForm = () => {
+		setFormPost(nullForm);
+		bodyContentRef.current.innerHTML = null;
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		typeForm == "add" ? savePost() : editPost();
+		typeForm === "add" ? savePost() : editPost();
 		resetForm();
 	};
 
 	setTimeout(() => {
 		if (selectRef.current) {
-			let options = Array.from(selectRef.current.options);
+			const options = Array.from(selectRef.current.options);
 			options.find((ele) =>
 				ele.value == formPost.statuspost
 					? ele.setAttribute("selected", true)
@@ -118,7 +108,7 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 							name="statuspost"
 							id="statuspost"
 							onChange={handleChange}
-              className="w-full"
+							className="w-full"
 						>
 							<option value="Borrador">Borrador</option>
 							<option value="Publica">Publica</option>

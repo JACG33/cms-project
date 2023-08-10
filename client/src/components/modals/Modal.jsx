@@ -1,41 +1,40 @@
 import { useEffect, useRef, useState } from "react";
 import { API_URL } from "../../config/constans";
 
+const classCss = ["outline-offset-3", "outline", "outline-green-500"];
 export const ModalForm = ({ openModal, bodyContentRef, handleOpenModal }) => {
 	const refModal = useRef("modalDialog");
-	const refImg = useRef();
 	const [files, setFiles] = useState([]);
 	const [fileSelected, setFileSelected] = useState("");
 	const [imgSize, setImgSize] = useState("small");
 
 	const getFiles = () => {
-		fetch(`${API_URL}uploads/`,{
-      headers: {
-        "X-type-file": "image",
-      },
-    })
+		fetch(`${API_URL}uploads/`, {
+			headers: {
+				"X-type-file": "image",
+			},
+		})
 			.then((res) => res.json())
 			.then((res) => setFiles(res));
 	};
 
 	const addFile = () => {
-		const fileSize = JSON.parse(fileSelected.sizes)[imgSize];
-		bodyContentRef.current.innerHTML += `
-    <a href="${fileSelected.src}"  style="position: relative;">
-      <img src="${fileSize}" alt="${fileSelected.alt}" class="cursor-pointer"  data-edit="img"/>
-    </a>`;
-		handleOpenModal();
+		if (fileSelected !== "") {
+			const fileSize = JSON.parse(fileSelected.sizes)[imgSize];
+			bodyContentRef.current.innerHTML += `
+			<a href="${fileSelected.src}" target="_blank" rel="noopener noreferrer">
+				<img src="${fileSize}" alt="${fileSelected.alt}" class="cursor-pointer"  data-edit="img"/>
+			</a>
+			<p><br/></p>
+			`;
+			handleOpenModal();
+		}
 	};
 
-	const selectSizeImg = (e) => {
-		setImgSize(e.target.value);
-	};
+	const selectSizeImg = (e) => setImgSize(e.target.value);
 
 	const selectedFile = (e) => {
-		document
-			.querySelectorAll("img[data-type=img]")
-			.forEach((ele) => (ele.className = "w-40 h-40 m-auto object-cover"));
-		e.target.className += " outline-offset-3 outline outline-green-500";
+		e.target.classList.add(...classCss);
 		setFileSelected({
 			src: e.target.src,
 			alt: e.target.alt,
@@ -50,25 +49,24 @@ export const ModalForm = ({ openModal, bodyContentRef, handleOpenModal }) => {
 		} else {
 			refModal.current.close();
 			setFileSelected("");
-			document
-				.querySelectorAll("img[data-type=img]")
-				.forEach((ele) => (ele.className = "w-40 h-40 m-auto object-cover"));
+			document.querySelectorAll("img[data-type=img]").forEach((ele) => {
+				ele.className = "w-40 h-40 m-auto object-cover";
+			});
 		}
 	}, [openModal]);
 	return (
 		<dialog ref={refModal} className="floatModal">
 			<div className="p-3 grid grid-cols-4 gap-4">
 				{files.length > 0 ? (
-					files.map((file, index) => (
+					files.map((file) => (
 						<img
-							onClick={selectedFile}
-							key={index}
-							ref={refImg}
-							className="w-40 h-40 m-auto object-cover"
+							key={file.id}
+							className="w-40 h-40 m-auto object-cover cursor-pointer"
 							src={file.path}
 							alt={file.nameFile}
 							data-type={"img"}
 							data-sizes={file.sizeFile}
+							onClick={selectedFile}
 						/>
 					))
 				) : (

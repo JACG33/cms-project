@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Form from "./Form";
 import { nullForm } from "../../../config/constans";
+import Form from "./Form";
 
 const AddContenido = () => {
   const [formPost, setFormPost] = useState(nullForm);
