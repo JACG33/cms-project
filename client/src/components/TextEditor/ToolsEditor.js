@@ -1,6 +1,5 @@
 export const ToolsEditor = () => {
 	let imgAlign;
-	let parent;
 	let basnd;
 	let extnd;
 	let childrenOfSelection = [];
@@ -39,16 +38,16 @@ export const ToolsEditor = () => {
 		if (type.match(/ul|ol/)) {
 			const list = document.createElement(type);
 			if (
-				find[0].parentElement.localName.match(/ul|ol/) &&
-				find[0].parentElement.localName !== type
+				find[0]?.parentElement.localName.match(/ul|ol/) &&
+				find[0]?.parentElement.localName !== type
 			) {
 				find[0].parentElement.replaceWith(list);
 				find.forEach((ele) => list.append(ele));
 				return;
 			}
 			if (
-				find[0].parentElement.localName.match(/ul|ol/) &&
-				find[0].parentElement.localName === type
+				find[0]?.parentElement.localName.match(/ul|ol/) &&
+				find[0]?.parentElement.localName === type
 			) {
 				find.forEach((ele) => {
 					const p = document.createElement("p");
@@ -68,7 +67,7 @@ export const ToolsEditor = () => {
 			find.forEach((ele) => {
 				const tag = document.createElement(type);
 				tag.textContent = ele.textContent;
-				if (ele.parentElement.localName.match(/ul|ol/)) {
+				if (ele.parentElement?.localName.match(/ul|ol/)) {
 					ele.innerHTML = null;
 					ele.append(tag);
 				} else {
@@ -84,6 +83,15 @@ export const ToolsEditor = () => {
 			ele.classList.remove(...classAlign);
 			ele.classList.add(`text-${align}`);
 		});
+	};
+
+	const fontStyle = ({ style }) => {
+		const FONT_STYLES = {
+			bold: "font-bold",
+			italic: "italic",
+		};
+		const find = findItems();
+		find.forEach((ele) => ele.classList.toggle(FONT_STYLES[style]));
 	};
 
 	document.addEventListener("click", (e) => {
@@ -112,21 +120,13 @@ export const ToolsEditor = () => {
 					"display: block;margin-left: auto; margin-right: auto;",
 				);
 		}
-		if (target.matches("#bold")) {
-			if (parent) {
-				parent.classList.toggle("font-bold");
-			}
-		}
-		if (target.matches("#italic")) {
-			if (parent) {
-				parent.classList.toggle("italic");
-			}
-		}
 		if (target.dataset.btn === "align") {
 			alignText({ align: target.dataset.align });
 		}
 		if (target.dataset.btn === "list")
 			generateTag({ type: target.dataset.list });
+		if (target.dataset.btn === "stylefont")
+			fontStyle({ style: target.dataset.style });
 	});
 
 	document.addEventListener("change", (e) => {
@@ -135,20 +135,18 @@ export const ToolsEditor = () => {
 	});
 
 	document.addEventListener("selectionchange", (e) => {
-		const { anchorNode, baseNode, extentNode } = window.getSelection();
+		const { anchorNode, focusNode } = window.getSelection();
 		if (
-			anchorNode.localName?.match(/div/) &&
+			anchorNode?.localName?.match(/div/) &&
 			anchorNode.outerHTML === "<div><br></div>"
 		) {
 			const p = document.createElement("p");
 			p.innerHTML = "</br>";
 			anchorNode.replaceWith(p);
 		}
-		if (anchorNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li/)) {
-			parent = anchorNode.parentElement;
-
-			basnd = baseNode;
-			extnd = extentNode;
+		if (anchorNode?.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li/)) {
+			basnd = anchorNode;
+			extnd = focusNode;
 
 			const wrapperChilds = window
 				.getSelection()
