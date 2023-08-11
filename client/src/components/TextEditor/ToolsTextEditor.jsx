@@ -19,10 +19,14 @@ const ToolsTextEditor = ({ handleChange, bodyContentRef, mark }) => {
 				<button type="button" id="italic">
 					I
 				</button>
-				<select name="" id="heading">
-					<option value="ul">Points</option>
-					<option value="ol">Number</option>
-				</select>
+
+				<button type="button" data-btn="list"  data-list="ul">
+					P
+				</button>
+				<button type="button" data-btn="list"  data-list="ol">
+					N
+				</button>
+
 				<button type="button" id="left" data-btn="align"  data-align="left">
 					left
 				</button>

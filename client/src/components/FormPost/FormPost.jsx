@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import ToolsTextEditor from "../../../components/TextEditor/ToolsTextEditor";
-import { ModalForm } from "../../../components/modals/Modal";
-import { API_URL, nullForm } from "../../../config/constans";
+import { API_URL, nullForm } from "../../config/constans";
+import ToolsTextEditor from "../TextEditor/ToolsTextEditor";
+import { ModalForm } from "../modals/Modal";
 
-const Form = ({ formPost, setFormPost, typeForm, mark }) => {
+const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 	const bodyContentRef = useRef();
 	const selectRef = useRef();
 
@@ -121,4 +121,4 @@ const Form = ({ formPost, setFormPost, typeForm, mark }) => {
 	);
 };
 
-export default Form;
+export default FormPost;

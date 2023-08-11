@@ -46,6 +46,17 @@ h6 {
   font-weight: bold;
 }
 
+ol, ul {
+  margin: inherit;
+  padding: inherit;
+}
+ul{
+  list-style: disc;
+}
+ol{
+  list-style: decimal;
+}
+
 body {
   @apply bg-slate-300 text-neutral-600 dark:bg-neutral-800 dark:text-slate-100;
 }

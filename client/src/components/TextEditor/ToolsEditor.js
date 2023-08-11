@@ -17,29 +17,63 @@ export const ToolsEditor = () => {
 				if (ele.textContent === extnd.textContent) endPos = inx;
 			});
 			childrenOfSelection.forEach((ele, ind) => {
-				if (ele.textContent === basnd.textContent) items.push(ele);
-				if (ind > startPos && ind < endPos) items.push(ele);
-				if (ele.textContent === extnd.textContent) items.push(ele);
+				if (ele.textContent === basnd.textContent) {
+					items.push(ele);
+				}
+				if (
+					(ind > startPos && ind < endPos) ||
+					(ind > endPos && ind < startPos)
+				) {
+					items.push(ele);
+				}
+				if (ele.textContent === extnd.textContent) {
+					items.push(ele);
+				}
 			});
 			return items;
 		} else return childrenOfSelection;
 	};
 
 	const generateTag = ({ type }) => {
-		if (type === "ul" || type === "ol") {
-			const find = findItems();
-			const tag = document.createElement(type);
-			findItems().forEach((ele) => {
+		const find = findItems();
+		if (type.match(/ul|ol/)) {
+			const list = document.createElement(type);
+			if (
+				find[0].parentElement.localName.match(/ul|ol/) &&
+				find[0].parentElement.localName !== type
+			) {
+				find[0].parentElement.replaceWith(list);
+				find.forEach((ele) => list.append(ele));
+				return;
+			}
+			if (
+				find[0].parentElement.localName.match(/ul|ol/) &&
+				find[0].parentElement.localName === type
+			) {
+				find.forEach((ele) => {
+					const p = document.createElement("p");
+					p.textContent = ele.textContent;
+					ele.parentElement.insertAdjacentElement("beforebegin", p);
+				});
+				find[0].parentElement.remove();
+				return;
+			}
+			find.forEach((ele) => {
 				const li = document.createElement("li");
 				li.textContent = ele.textContent;
-				tag.append(li);
-				ele.replaceWith(tag);
+				list.append(li);
+				ele.replaceWith(list);
 			});
 		} else {
-			findItems().forEach((ele) => {
+			find.forEach((ele) => {
 				const tag = document.createElement(type);
 				tag.textContent = ele.textContent;
-				ele.replaceWith(tag);
+				if (ele.parentElement.localName.match(/ul|ol/)) {
+					ele.innerHTML = null;
+					ele.append(tag);
+				} else {
+					ele.replaceWith(tag);
+				}
 			});
 		}
 	};
@@ -91,12 +125,13 @@ export const ToolsEditor = () => {
 		if (target.dataset.btn === "align") {
 			alignText({ align: target.dataset.align });
 		}
+		if (target.dataset.btn === "list")
+			generateTag({ type: target.dataset.list });
 	});
 
 	document.addEventListener("change", (e) => {
 		const target = e.target;
 		if (target.matches("#heading")) generateTag({ type: target.value });
-		if (target.matches("#list")) generateTag({ type: target.value });
 	});
 
 	document.addEventListener("selectionchange", (e) => {
@@ -109,22 +144,24 @@ export const ToolsEditor = () => {
 			p.innerHTML = "</br>";
 			anchorNode.replaceWith(p);
 		}
-		if (anchorNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6/)) {
+		if (anchorNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li/)) {
 			parent = anchorNode.parentElement;
 
 			basnd = baseNode;
 			extnd = extentNode;
+
+			const wrapperChilds = window
+				.getSelection()
+				.getRangeAt(0).commonAncestorContainer;
+
 			if (
-				window.getSelection().getRangeAt(0).commonAncestorContainer.childNodes
-					.length !== 0
-			)
-				childrenOfSelection = window.getSelection().getRangeAt(0)
-					.commonAncestorContainer.childNodes;
-			else
-				childrenOfSelection = [
-					window.getSelection().getRangeAt(0).commonAncestorContainer
-						.parentElement,
-				];
+				wrapperChilds.localName?.match(/ul|ol/) ||
+				wrapperChilds.childNodes.length !== 0
+			) {
+				childrenOfSelection = wrapperChilds.childNodes;
+			} else {
+				childrenOfSelection = [wrapperChilds.parentElement];
+			}
 		}
 	});
 

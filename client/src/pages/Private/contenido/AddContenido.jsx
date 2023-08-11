@@ -1,13 +1,13 @@
 import { useState } from "react";
+import FormPost from "../../../components/FormPost/FormPost";
 import { nullForm } from "../../../config/constans";
-import Form from "./Form";
 
 const AddContenido = () => {
   const [formPost, setFormPost] = useState(nullForm);
-  let ele={ __html:"<p></br></p>"}
+  const ele={ __html:"<p></br></p>"}
   return (
     <div>
-      <Form formPost={formPost} setFormPost={setFormPost} typeForm={"add"} mark={ele}/>
+      <FormPost formPost={formPost} setFormPost={setFormPost} typeForm={"add"} mark={ele}/>
     </div>
   );
 };
