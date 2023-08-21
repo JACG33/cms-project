@@ -85,13 +85,62 @@ export const ToolsEditor = () => {
 		});
 	};
 
+	const goToParent = ({ element }) => {
+		if (!element.localName.match(/p|li/))
+			return goToParent({ element: element.parentElement });
+		return element;
+	};
+
 	const fontStyle = ({ style }) => {
 		const FONT_STYLES = {
-			bold: "font-bold",
-			italic: "italic",
+			strong: ["strong", () => document.createElement("strong")],
+			i: ["i", () => document.createElement("i")],
 		};
 		const find = findItems();
-		find.forEach((ele) => ele.classList.toggle(FONT_STYLES[style]));
+		find.forEach((ele) => {
+			const pTag = goToParent({ element: ele });
+			if (pTag.innerHTML.match(FONT_STYLES[style][0])) {
+				pTag.innerHTML = pTag.innerHTML.replace(
+					`<${FONT_STYLES[style][0]}>`,
+					"",
+				);
+			} else {
+				const tag = FONT_STYLES[style][1]();
+				tag.innerHTML = ele.innerHTML;
+				ele.innerHTML = null;
+				ele.insertAdjacentElement("afterbegin", tag);
+			}
+		});
+	};
+
+	const handleHeadingText = ({ htmlNode }) => {
+		// console.log({ htmlNode });
+		if (htmlNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6/))
+			heading.value = htmlNode.parentElement?.localName;
+		else heading.value = "p";
+
+		document
+			.querySelectorAll(".tool__btn")
+			.forEach((ele) => ele.classList.remove("tool__btn--active"));
+
+		if (htmlNode.parentElement?.localName.match(/strong|i/)) {
+			document
+				.querySelector(`button[data-style=${htmlNode.parentElement.localName}]`)
+				?.classList.add("tool__btn--active");
+		}
+
+		if (htmlNode.parentElement.parentElement.localName === "li") {
+			const listNode = htmlNode.parentElement.parentElement.parentElement;
+			document
+				.querySelector(`button[data-list=${listNode.localName}]`)
+				.classList.add("tool__btn--active");
+		}
+		if (htmlNode.parentElement.localName === "li") {
+			const listNode = htmlNode.parentElement.parentElement;
+			document
+				.querySelector(`button[data-list=${listNode.localName}]`)
+				.classList.add("tool__btn--active");
+		}
 	};
 
 	document.addEventListener("click", (e) => {
@@ -137,14 +186,8 @@ export const ToolsEditor = () => {
 	document.addEventListener("selectionchange", (e) => {
 		const { anchorNode, focusNode } = window.getSelection();
 		if (
-			anchorNode?.localName?.match(/div/) &&
-			anchorNode.outerHTML === "<div><br></div>"
+			anchorNode?.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li|strong|i/)
 		) {
-			const p = document.createElement("p");
-			p.innerHTML = "</br>";
-			anchorNode.replaceWith(p);
-		}
-		if (anchorNode?.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li/)) {
 			basnd = anchorNode;
 			extnd = focusNode;
 
@@ -160,10 +203,24 @@ export const ToolsEditor = () => {
 			} else {
 				childrenOfSelection = [wrapperChilds.parentElement];
 			}
+			handleHeadingText({
+				htmlNode: anchorNode,
+			});
+		}
+	});
+
+	document.addEventListener("keypress", (e) => {
+		const { target, key } = e;
+		if (key === "Enter" && target.innerHTML.includes("<div>")) {
+			const replaceElement = target.querySelector("div");
+			const p = document.createElement("p");
+			p.innerHTML = target.textContent;
+			replaceElement.replaceWith(p);
 		}
 	});
 
 	document.removeEventListener("click", (e) => {});
 	document.removeEventListener("change", (e) => {});
 	document.removeEventListener("selectionchange", (e) => {});
+	document.removeEventListener("keypress", (e) => {});
 };

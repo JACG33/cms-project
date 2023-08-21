@@ -4,8 +4,8 @@ ToolsEditor();
 const ToolsTextEditor = ({ handleChange, bodyContentRef, mark }) => {
 	return (
 		<>
-			<div className="bg-slate-500 p-2 flex justify-evenly gap-2">
-				<select name="" id="heading">
+			<div className="tools__editor">
+				<select className="tool__btn" name="" id="heading">
 					<option value="p">Parrafo</option>
 					<option value="h2">Titulo1</option>
 					<option value="h3">Titulo2</option>
@@ -13,30 +13,30 @@ const ToolsTextEditor = ({ handleChange, bodyContentRef, mark }) => {
 					<option value="h5">Titulo4</option>
 					<option value="h6">Titulo5</option>
 				</select>
-				<button type="button" data-btn="stylefont" data-style="bold">
+				<button type="button" className="tool__btn" data-btn="stylefont" data-style="strong">
 					B
 				</button>
-				<button type="button" data-btn="stylefont" data-style="italic">
+				<button type="button" className="tool__btn" data-btn="stylefont" data-style="i">
 					I
 				</button>
 
-				<button type="button" data-btn="list" data-list="ul">
+				<button type="button" className="tool__btn" data-btn="list" data-list="ul">
 					P
 				</button>
-				<button type="button" data-btn="list" data-list="ol">
+				<button type="button" className="tool__btn" data-btn="list" data-list="ol">
 					N
 				</button>
 
-				<button type="button" id="left" data-btn="align" data-align="left">
+				<button type="button" className="tool__btn" id="left" data-btn="align" data-align="left">
 					left
 				</button>
-				<button type="button" id="center" data-btn="align" data-align="center">
+				<button type="button" className="tool__btn" id="center" data-btn="align" data-align="center">
 					center
 				</button>
-				<button type="button" id="right" data-btn="align" data-align="right">
+				<button type="button" className="tool__btn" id="right" data-btn="align" data-align="right">
 					right
 				</button>
-				<button type="button" data-btn="align" data-align="justify">
+				<button type="button" className="tool__btn" data-btn="align" data-align="justify">
 					justify
 				</button>
 			</div>
