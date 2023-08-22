@@ -1,19 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { API_URL, nullForm } from "../../config/constans";
 import ToolsTextEditor from "../TextEditor/ToolsTextEditor";
 import { ModalForm } from "../modals/Modal";
 
-const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
+let mark = { __html: "<p></br></p>" };
+const FormPost = ({ typeForm }) => {
 	const bodyContentRef = useRef();
 	const selectRef = useRef();
+	const { id } = useParams();
 
-	const [openModal, setOpenModal] = useState(false);
-
-	const handleOpenModal = () => {
-		if (!openModal) {
-			setOpenModal(true);
-		} else setOpenModal(false);
-	};
+	const [formPost, setFormPost] = useState(nullForm);
 
 	const handleChange = (e) => {
 		const { name, id, value, innerHTML, innerText } = e.target;
@@ -47,6 +44,17 @@ const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 			.then((res) => console.log(res));
 	};
 
+	const getPost = () => {
+		fetch(`${API_URL}posts/${id}`, {
+			headers: { "content-type": "application/json" },
+		})
+			.then((res) => res.json())
+			.then((res) => {
+				setFormPost(res.data);
+				mark = { __html: res.data.descrip };
+			});
+	};
+
 	const resetForm = () => {
 		setFormPost(nullForm);
 		bodyContentRef.current.innerHTML = null;
@@ -58,6 +66,9 @@ const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 		resetForm();
 	};
 
+	useEffect(() => {
+		if (typeForm === "edit") getPost();
+	}, []);
 	setTimeout(() => {
 		if (selectRef.current) {
 			const options = Array.from(selectRef.current.options);
@@ -68,14 +79,10 @@ const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 			);
 		}
 	}, 500);
+	if (typeForm === "add") mark = { __html: "<p></br></p>" };
 
 	return (
 		<>
-			<ModalForm
-				openModal={openModal}
-				handleOpenModal={handleOpenModal}
-				bodyContentRef={bodyContentRef}
-			/>
 			<form onSubmit={handleSubmit} className="form__editor">
 				<div className="w-full flex flex-col gap-4">
 					<input
@@ -88,7 +95,11 @@ const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 						placeholder="Titulo Contenido"
 					/>
 					<div className="rounded-lg overflow-hidden">
-						<ToolsTextEditor bodyContentRef={bodyContentRef} handleChange={handleChange} mark={mark} />
+						<ToolsTextEditor
+							bodyContentRef={bodyContentRef}
+							handleChange={handleChange}
+							mark={mark}
+						/>
 					</div>
 				</div>
 				<div className="flex flex-col gap-4">
@@ -105,16 +116,10 @@ const FormPost = ({ formPost, setFormPost, typeForm, mark }) => {
 							<option value="Publica">Publica</option>
 						</select>
 					</div>
-					<button
-						type="button"
-						className="btn btn__edit"
-						onClick={handleOpenModal}
-					>
-						Añadir Imagen
-					</button>
 					<button type="submit" className="btn btn__save">
 						Guardar
 					</button>
+					<ModalForm bodyContentRef={bodyContentRef} />
 				</div>
 			</form>
 		</>
