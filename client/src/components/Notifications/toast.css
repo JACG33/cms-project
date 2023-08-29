@@ -1,0 +1,35 @@
+/* Toast Componet */
+.toast__item{
+  @apply flex gap-2 w-full m-auto max-w-[380px] py-2 px-3 rounded-md bg-slate-300 text-slate-200 dark:bg-neutral-600 overflow-hidden shadow-md transition-all opacity-100;
+  animation: showtoast 300ms linear;
+}
+
+.toast__item__icon{
+  @apply flex place-items-center
+}
+.toast__item__icon .icon{
+  @apply w-[40px] h-[40px]
+}
+
+.toast__item span{
+  @apply text-lg font-bold
+}
+.toast__item p{
+  @apply text-gray-800 dark:text-slate-200 
+}
+
+@keyframes showtoast {
+  from{
+    @apply opacity-0
+  }
+}
+
+.toast__item--error span{
+  @apply text-red-500
+}
+.toast__item--success span{
+  @apply text-green-500
+}
+.toast__item--info span{
+  @apply text-blue-500
+}

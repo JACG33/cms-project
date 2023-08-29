@@ -1,0 +1,19 @@
+.form__editor {
+  @apply flex gap-4 w-full p-4 justify-center;
+}
+
+.form__editor__title {
+  @apply w-full py-2 px-5 rounded-lg;
+}
+
+.form__editor__descrip {
+  @apply bg-[#414141] w-full min-w-full max-w-2xl min-h-[230px] max-h-80 overflow-y-auto py-2 px-5;
+}
+
+.floatModal {
+  @apply m-auto rounded-md border-none;
+}
+
+.floatModal::backdrop {
+  @apply backdrop-blur-sm bg-[#00000035];
+}

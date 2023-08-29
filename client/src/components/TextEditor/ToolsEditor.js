@@ -2,6 +2,7 @@ export const ToolsEditor = () => {
 	let imgAlign;
 	let basnd;
 	let extnd;
+	let textSelec;
 	let childrenOfSelection = [];
 	const cssSelectedImg = ["outline-offset-3", "outline", "outline-green-500"];
 	const classAlign = ["text-right", "text-left", "text-center", "text-justify"];
@@ -91,26 +92,52 @@ export const ToolsEditor = () => {
 		return element;
 	};
 
+	const cleanEmptyTag = ({ elementToClean }) => {
+		const div = document.querySelector("[contenteditable]");
+		div.innerHTML = div.innerHTML.replace(
+			`<${elementToClean}></${elementToClean}>`,
+			"",
+		);
+		div.innerHTML = div.innerHTML.replace(
+			`<${elementToClean}> </${elementToClean}>`,
+			"",
+		);
+	};
+
 	const fontStyle = ({ style }) => {
 		const FONT_STYLES = {
-			strong: ["strong", () => document.createElement("strong")],
-			i: ["i", () => document.createElement("i")],
+			strong: "strong",
+			i: "i",
 		};
 		const find = findItems();
 		find.forEach((ele) => {
 			const pTag = goToParent({ element: ele });
-			if (pTag.innerHTML.match(FONT_STYLES[style][0])) {
-				pTag.innerHTML = pTag.innerHTML.replace(
-					`<${FONT_STYLES[style][0]}>`,
-					"",
-				);
+			if (
+				pTag.innerHTML.match(
+					`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
+				) ||
+				ele.localName?.match(FONT_STYLES[style])
+			) {
+				if (ele.localName.match(FONT_STYLES[style])) {
+					pTag.innerHTML = pTag.innerHTML.replace(
+						textSelec,
+						`</${FONT_STYLES[style]}>${textSelec}<${FONT_STYLES[style]}>`,
+					);
+				} else {
+					pTag.innerHTML = pTag.innerHTML.replace(
+						`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
+						textSelec,
+					);
+				}
 			} else {
-				const tag = FONT_STYLES[style][1]();
-				tag.innerHTML = ele.innerHTML;
-				ele.innerHTML = null;
-				ele.insertAdjacentElement("afterbegin", tag);
+				console.log(pTag.innerHTML);
+				ele.innerHTML = ele.innerHTML.replace(
+					textSelec,
+					`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
+				);
 			}
 		});
+		cleanEmptyTag({ elementToClean: FONT_STYLES[style] });
 	};
 
 	const handleHeadingText = ({ htmlNode }) => {
@@ -184,7 +211,11 @@ export const ToolsEditor = () => {
 	});
 
 	document.addEventListener("selectionchange", (e) => {
-		const { anchorNode, focusNode } = window.getSelection();
+		const { anchorNode, anchorOffset, focusNode, focusOffset } =
+			window.getSelection();
+		textSelec = window.getSelection().toString();
+		basnd = null;
+		extnd = null;
 		if (
 			anchorNode?.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li|strong|i/)
 		) {
@@ -211,11 +242,15 @@ export const ToolsEditor = () => {
 
 	document.addEventListener("keypress", (e) => {
 		const { target, key } = e;
-		if (key === "Enter" && target.innerHTML.includes("<div>")) {
-			const replaceElement = target.querySelector("div");
-			const p = document.createElement("p");
-			p.innerHTML = target.textContent;
-			replaceElement.replaceWith(p);
+		if (key === "Enter") {
+			setTimeout(() => {
+				if (target.innerHTML.includes("<div>")) {
+					const replaceElement = target.querySelector("div");
+					const p = document.createElement("p");
+					p.innerHTML = "</br>";
+					replaceElement.replaceWith(p);
+				}
+			}, 100);
 		}
 	});
 

@@ -20,7 +20,7 @@ const Categories = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setCategories([form]);
-    if (formType == "create") {
+    if (formType === "create") {
       try {
         const solic = await fetch(`${API_URL}categories`, {
           method: "POST",
@@ -46,7 +46,7 @@ const Categories = () => {
         console.log(error);
       }
     }
-    if (formType == "edit") {
+    if (formType === "edit") {
       try {
         const solic = await fetch(`${API_URL}categories/0`, {
           method: "PUT",
@@ -61,7 +61,7 @@ const Categories = () => {
         const json = await solic.json();
         setCategories(
           categories.map((ele) => {
-            if (ele.id == form.id)
+            if (ele.id === form.id)
               return { ...ele, name: form.name, slug: form.slug };
             return ele;
           })
@@ -86,7 +86,7 @@ const Categories = () => {
       const json = await solic.json();
       setCategories(
         categories.filter((ele) => {
-          if (ele.id != id) return ele;
+          if (ele.id !== id) return ele;
         })
       );
 
@@ -103,12 +103,12 @@ const Categories = () => {
 
   const handleEdit = (e) => {
     setFormType("edit");
-    let findCategorie = categories.find((ele) => ele.id == e);
+    const findCategorie = categories.find((ele) => ele.id === e);
     setForm(findCategorie);
   };
 
   useEffect(() => {
-    if (categories?.length == 0) {
+    if (categories?.length === 0) {
       fetch(`${API_URL}categories`)
         .then((res) => res.json())
         .then((res) => setCategories(res.data));
@@ -139,14 +139,14 @@ const Categories = () => {
           Cancelar
         </button>
         <button className="btn btn__save" type="submit">
-          {formType == "create" ? "Guardar" : "Editar"}
+          {formType === "create" ? "Guardar" : "Editar"}
         </button>
       </form>
       <div className="py-6 text-center">
         {categories?.length > 0 ? (
-          categories.map((categorie, ind) => (
+          categories.map((categorie) => (
             <div
-              key={ind}
+              key={categorie.id}
               className="flex justify-evenly items-center gap-2 p-3 hover:bg-neutral-600 transition-all"
             >
               <span>{categorie.name}</span>

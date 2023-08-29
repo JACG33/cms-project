@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
-import { Loader } from "../../../components/Loader";
+import { Loader } from "../../../components/Loader/Loader";
 import { IMG_PlACEHOLDER, acceptedFiles } from "../../../config/constans";
-import { SliceText } from "../../../helpers/strings";
+import { SliceTextExtensionFile } from "../../../helpers/strings";
 import { delet, get, post } from "../../../services";
 import ModalUpload from "./ModalUpload";
 
@@ -49,7 +49,7 @@ const Uploads = () => {
 					nameFile: file.name,
 					typeFile: "image",
 					sizeFile: `{"small":"${URL.createObjectURL(file)}"}`,
-					nameFileSlice: SliceText(file.name),
+					nameFileSlice: SliceTextExtensionFile(file.name),
 				});
 			});
 			if (tmpErros.length === 0) return saveFile(file, filesToUpload);
@@ -107,7 +107,7 @@ const Uploads = () => {
 		if (!json.error) {
 			json = json.map((ele) => ({
 				...ele,
-				nameFileSlice: SliceText(ele.nameFile),
+				nameFileSlice: SliceTextExtensionFile(ele.nameFile),
 			}));
 			setFileStorage({ ...fileStorage, [typeFileAccept.type]: json });
 		}

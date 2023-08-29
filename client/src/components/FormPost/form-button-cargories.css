@@ -1,0 +1,15 @@
+.categories__wrapper{
+  @apply max-h-[32px] overflow-hidden bg-indigo-600 rounded-md transition-all;
+}
+
+.categories__wrapper--show{
+  @apply max-h-[320px]
+}
+
+.categories__items{
+  @apply grid gap-1
+}
+
+.categorie__items--selected{
+  @apply bg-slate-100 text-indigo-600
+}

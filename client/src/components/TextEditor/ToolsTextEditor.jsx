@@ -1,4 +1,5 @@
 import { ToolsEditor } from "./ToolsEditor";
+import "./tool-text-editor.css";
 
 ToolsEditor();
 const ToolsTextEditor = ({ handleChange, bodyContentRef, mark }) => {

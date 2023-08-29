@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PostCard from "../../components/Post/PostCard";
 import { API_URL } from "../../config/constans";
+import { SliceText } from "../../helpers/strings";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -15,7 +16,7 @@ const Home = () => {
         posts.map((post) => (
           <PostCard
             key={post.id}
-            title={post.title}
+            title={SliceText({text:post.title,length:15})}
             excerpt={post.excerpt}
             imgsrc={post.img}
             id={post.id}

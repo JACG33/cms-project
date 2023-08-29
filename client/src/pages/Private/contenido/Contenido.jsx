@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "../../../config/constans";
 import PostCardPrivate from "../../../components/Post/PostCardPrivate";
+import { API_URL } from "../../../config/constans";
+import { SliceText } from "../../../helpers/strings";
 
 const Contenido = () => {
   const [posts, setPosts] = useState([]);
@@ -15,7 +16,7 @@ const Contenido = () => {
         posts.map((post) => (
           <PostCardPrivate
             key={post.id}
-            title={post.title}
+            title={SliceText({text:post.title,length:15})}
             descrip={post.descrip}
             excerpt={post.excerpt}
             imgsrc={post.img}

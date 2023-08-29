@@ -1,5 +1,12 @@
 # CMS
 
+## Version 1.2.0
++ ### Client
++ FormPost updated, now you can add categories to new post.
++ Notificatios Component, added new component to notificate to user.
++ ### Backend
++ Added Zod dependencie to validate Requests.
+
 ## Version 1.1.25
 + Changed the Tool Editor, before when toggling to __italic__ or __strong__ text, added a css class to achieve this, change to add the correct __HTML__ tag.
 + Currenly exist a bug, when select an word of paragraph and togglin font style, wrap all paragraph in __HTML__ tag.

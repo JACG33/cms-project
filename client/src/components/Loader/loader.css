@@ -1,0 +1,21 @@
+.wrap__loader {
+  @apply w-full h-full bg-[#00000090] absolute inset-0 z-0 backdrop-blur-[1px] hidden;
+}
+
+.wrap__loader--show {
+  display: flex;
+}
+
+.loader {
+  @apply w-[80px] h-[80px] rounded-full m-auto z-[1];
+  border: 5px solid #ffffff;
+  border-top-color: transparent;
+  animation: loader 1s linear infinite;
+  transition: all 500ms ease-in-out;
+}
+
+@keyframes loader {
+  to {
+    transform: rotate(1turn);
+  }
+}

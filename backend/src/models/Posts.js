@@ -30,6 +30,10 @@ Posts.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    categories: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     statuspost: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/Loader/Loader";
 import { PrivateLayout } from "../layouts/PrivateLayout";
 import { PublicLayout } from "../layouts/PublicLayout";
 import Admin from "../pages/Private/Admin";
