@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const ItemCategorie = ({ categoriName, handleClickItem, categoriSelected=undefined }) => {
+const ItemCategorie = ({
+	categoriName,
+	handleClickItem,
+	categoriSelected = undefined,
+}) => {
 	const status = useRef(false);
-	const [active,setActive]=useState(false)
+	const [active, setActive] = useState(false);
 	const handleClick = (target) => {
 		status.current = !status.current;
 		if (status.current)
@@ -10,8 +14,13 @@ const ItemCategorie = ({ categoriName, handleClickItem, categoriSelected=undefin
 		else return handleClickItem({ target: target.target, type: "remove" });
 	};
 	useEffect(() => {
-		if (categoriSelected === undefined) {status.current = false;setActive(false)}
-		else {status.current = true;setActive(true)}
+		if (categoriSelected === undefined) {
+			status.current = false;
+			setActive(false);
+		} else {
+			status.current = true;
+			setActive(true);
+		}
 	}, [categoriSelected]);
 
 	return (
@@ -19,7 +28,7 @@ const ItemCategorie = ({ categoriName, handleClickItem, categoriSelected=undefin
 			<button
 				type="button"
 				onClick={handleClick}
-				className={active===true ? "categorie__items--selected" : ""}
+				className={active === true ? "categorie__items--selected" : ""}
 			>
 				{categoriName}
 			</button>

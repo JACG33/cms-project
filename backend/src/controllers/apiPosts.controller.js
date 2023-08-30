@@ -6,10 +6,9 @@ const GetPosts = async (req, res) => {
 	try {
 		await Posts.sync();
 		const getPosts = await Posts.findAll();
-		if (getPosts.length == 0)
-			return res
-				.status(204)
-				.json({ message: "Sin posts", status: 204, data: null });
+		console.log(getPosts.length);
+		if (getPosts.length === 0)
+			return res.status(200).json({ message: "Sin posts", status: 204, data: null });
 		res.status(200).json({ message: "Posts", status: 200, data: getPosts });
 	} catch (error) {
 		console.log(error);

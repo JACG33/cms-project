@@ -6,32 +6,36 @@ import ItemCategorie from "./form-item-button-cargorie";
 
 const FormCategori = ({ handleChange, categoriesData }) => {
 	const wrapperRef = useRef();
-	const setCat = useRef(false);
-	const selectCategories = useRef(categoriesData);
+	const catRef = useRef();
 	const [categories, setCategories] = useState([]);
-	const [selectCategoriesj, setSelectCategories] = useState(false);
 
 	const handleClick = () => {
 		wrapperRef.current.classList.toggle("categories__wrapper--show");
 	};
 
 	const handleClickItem = ({ target, type }) => {
-		setSelectCategories(!selectCategoriesj);
-		setCat.current = true;
 		if (type === "add") {
-			console.log(selectCategories, "ad+++++");
-			selectCategories.current = {
-				...selectCategories.current,
+			catRef.current = {
+				...categoriesData,
 				[target.innerText]: target.innerText,
 			};
 		}
+
 		if (type === "remove") {
-			console.log(selectCategories, "remo+++++");
-			const tmp = { ...selectCategories.current };
+			const tmp = { ...catRef.current };
 			delete tmp[target.innerText];
-			selectCategories.current = tmp;
+			catRef.current = tmp;
 		}
+
+		const e = {
+			target: {
+				id: "categories",
+				value: JSON.stringify(catRef.current),
+			},
+		};
+		handleChange(e);
 	};
+
 	useEffect(() => {
 		if (categories?.length === 0) {
 			fetch(`${API_URL}categories`)
@@ -41,24 +45,13 @@ const FormCategori = ({ handleChange, categoriesData }) => {
 				});
 		}
 
-		if (setCat.current) {
-			const e = {
-				target: {
-					id: "categories",
-					value: JSON.stringify(selectCategories.current),
-				},
-			};
-			handleChange(e);
-		}
+		const time = setTimeout(() => {
+			catRef.current = categoriesData;
+		}, 500);
 
-		if (selectCategories.current===""||!selectCategories.current) {
-			const time = setTimeout(() => {
-				selectCategories.current = categoriesData;
-				setSelectCategories(!selectCategoriesj);
-			}, 500);
-			return () => clearTimeout(time);
-		}
-	}, [selectCategoriesj]);
+		return () => clearTimeout(time);
+	}, []);
+
 	return (
 		<div
 			ref={wrapperRef}
@@ -78,15 +71,14 @@ const FormCategori = ({ handleChange, categoriesData }) => {
 							key={ele.id}
 							handleClickItem={handleClickItem}
 							categoriName={ele.name}
-							categoriSelected={selectCategories.current?.[ele.name]}
+							categoriSelected={categoriesData?.[ele.name]}
 						/>
 					))
 				) : (
-					<span>Sin Categorias</span>
+					<span className="text-center">Sin Categorias</span>
 				)}
 			</div>
 		</div>
 	);
 };
-
 export default FormCategori;

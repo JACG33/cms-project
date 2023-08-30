@@ -1,5 +1,9 @@
 # CMS
 
+## Version 1.2.1
++ ### Client
++ FormPost/Category, Bug fixed, when you create new post, in logic of category componet if not choice any categorie was executed timeout infinite, now is corrected.
+
 ## Version 1.2.0
 + ### Client
 + FormPost updated, now you can add categories to new post.
