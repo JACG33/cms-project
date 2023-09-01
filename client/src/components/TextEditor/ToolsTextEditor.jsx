@@ -1,4 +1,7 @@
 import { ToolsEditor } from "./ToolsEditor";
+import AlignTextSelect from "./align-text-select";
+import FontBoldSlect from "./font-bold-select";
+import ListTypeSelect from "./list-type-select";
 import "./tool-text-editor.css";
 
 ToolsEditor();
@@ -14,32 +17,17 @@ const ToolsTextEditor = ({ handleChange, bodyContentRef, mark }) => {
 					<option value="h5">Titulo4</option>
 					<option value="h6">Titulo5</option>
 				</select>
-				<button type="button" className="tool__btn" data-btn="stylefont" data-style="strong">
-					B
-				</button>
-				<button type="button" className="tool__btn" data-btn="stylefont" data-style="i">
+				<FontBoldSlect />
+				<button
+					type="button"
+					className="tool__btn"
+					data-btn="stylefont"
+					data-style="i"
+				>
 					I
 				</button>
-
-				<button type="button" className="tool__btn" data-btn="list" data-list="ul">
-					P
-				</button>
-				<button type="button" className="tool__btn" data-btn="list" data-list="ol">
-					N
-				</button>
-
-				<button type="button" className="tool__btn" id="left" data-btn="align" data-align="left">
-					left
-				</button>
-				<button type="button" className="tool__btn" id="center" data-btn="align" data-align="center">
-					center
-				</button>
-				<button type="button" className="tool__btn" id="right" data-btn="align" data-align="right">
-					right
-				</button>
-				<button type="button" className="tool__btn" data-btn="align" data-align="justify">
-					justify
-				</button>
+				<ListTypeSelect />
+				<AlignTextSelect />
 			</div>
 			<div
 				contentEditable

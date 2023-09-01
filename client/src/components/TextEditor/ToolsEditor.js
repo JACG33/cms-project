@@ -6,6 +6,11 @@ export const ToolsEditor = () => {
 	let childrenOfSelection = [];
 	const cssSelectedImg = ["outline-offset-3", "outline", "outline-green-500"];
 	const classAlign = ["text-right", "text-left", "text-center", "text-justify"];
+	const FONT_STYLES = {
+		strong: "strong",
+		b: "b",
+		i: "i",
+	};
 
 	const findItems = () => {
 		if (basnd !== extnd) {
@@ -87,61 +92,50 @@ export const ToolsEditor = () => {
 	};
 
 	const goToParent = ({ element }) => {
-		if (!element.localName.match(/p|li/))
-			return goToParent({ element: element.parentElement });
-		return element;
+		if (element.localName?.match(/p|li/)) return element;
+		return goToParent({ element: element.parentElement });
 	};
 
 	const cleanEmptyTag = ({ elementToClean }) => {
-		const div = document.querySelector("[contenteditable]");
-		div.innerHTML = div.innerHTML.replace(
-			`<${elementToClean}></${elementToClean}>`,
-			"",
-		);
-		div.innerHTML = div.innerHTML.replace(
-			`<${elementToClean}> </${elementToClean}>`,
-			"",
-		);
+		document.querySelectorAll(elementToClean).forEach((ele) => {
+			if (ele.innerText === "" || ele.innerText === " ") ele.remove();
+		});
 	};
 
 	const fontStyle = ({ style }) => {
-		const FONT_STYLES = {
-			strong: "strong",
-			i: "i",
-		};
 		const find = findItems();
-		find.forEach((ele) => {
+		find.forEach((ele, index) => {
 			const pTag = goToParent({ element: ele });
 			if (
 				pTag.innerHTML.match(
-					`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
+					`<${FONT_STYLES[style]}>${textSelec[index]}</${FONT_STYLES[style]}>`,
 				) ||
 				ele.localName?.match(FONT_STYLES[style])
 			) {
 				if (ele.localName.match(FONT_STYLES[style])) {
 					pTag.innerHTML = pTag.innerHTML.replace(
-						textSelec,
-						`</${FONT_STYLES[style]}>${textSelec}<${FONT_STYLES[style]}>`,
+						textSelec[index],
+						`</${FONT_STYLES[style]}>${textSelec[index]}<${FONT_STYLES[style]}>`,
 					);
 				} else {
 					pTag.innerHTML = pTag.innerHTML.replace(
-						`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
-						textSelec,
+						`<${FONT_STYLES[style]}>${textSelec[index]}</${FONT_STYLES[style]}>`,
+						textSelec[index],
 					);
 				}
 			} else {
-				console.log(pTag.innerHTML);
-				ele.innerHTML = ele.innerHTML.replace(
-					textSelec,
-					`<${FONT_STYLES[style]}>${textSelec}</${FONT_STYLES[style]}>`,
+				pTag.innerHTML = pTag.innerHTML.replace(
+					textSelec[index],
+					`<${FONT_STYLES[style]}>${textSelec[index]}</${FONT_STYLES[style]}>`,
 				);
 			}
 		});
-		cleanEmptyTag({ elementToClean: FONT_STYLES[style] });
+		Object.values(FONT_STYLES).map((ele) =>
+			cleanEmptyTag({ elementToClean: FONT_STYLES[ele] }),
+		);
 	};
 
 	const handleHeadingText = ({ htmlNode }) => {
-		// console.log({ htmlNode });
 		if (htmlNode.parentElement?.localName.match(/p|h2|h3|h4|h5|h6/))
 			heading.value = htmlNode.parentElement?.localName;
 		else heading.value = "p";
@@ -150,7 +144,7 @@ export const ToolsEditor = () => {
 			.querySelectorAll(".tool__btn")
 			.forEach((ele) => ele.classList.remove("tool__btn--active"));
 
-		if (htmlNode.parentElement?.localName.match(/strong|i/)) {
+		if (htmlNode.parentElement?.localName.match(/strong|i|b/)) {
 			document
 				.querySelector(`button[data-style=${htmlNode.parentElement.localName}]`)
 				?.classList.add("tool__btn--active");
@@ -214,29 +208,35 @@ export const ToolsEditor = () => {
 		const { anchorNode, anchorOffset, focusNode, focusOffset } =
 			window.getSelection();
 		textSelec = window.getSelection().toString();
+		textSelec = textSelec.split("\n").filter((ele) => ele !== "");
 		basnd = null;
 		extnd = null;
-		if (
-			anchorNode?.parentElement?.localName.match(/p|h2|h3|h4|h5|h6|li|strong|i/)
-		) {
-			basnd = anchorNode;
-			extnd = focusNode;
 
-			const wrapperChilds = window
-				.getSelection()
-				.getRangeAt(0).commonAncestorContainer;
-
+		if (document.querySelector(".form__editor__descrip")) {
 			if (
-				wrapperChilds.localName?.match(/ul|ol/) ||
-				wrapperChilds.childNodes.length !== 0
+				anchorNode?.parentElement?.localName.match(
+					/p|h2|h3|h4|h5|h6|li|strong|i|b/,
+				)
 			) {
-				childrenOfSelection = wrapperChilds.childNodes;
-			} else {
-				childrenOfSelection = [wrapperChilds.parentElement];
+				basnd = anchorNode;
+				extnd = focusNode;
+
+				const wrapperChilds = window
+					.getSelection()
+					.getRangeAt(0).commonAncestorContainer;
+
+				if (
+					wrapperChilds.localName?.match(/ul|ol/) ||
+					wrapperChilds.childNodes.length !== 0
+				) {
+					childrenOfSelection = wrapperChilds.childNodes;
+				} else {
+					childrenOfSelection = [wrapperChilds.parentElement];
+				}
+				handleHeadingText({
+					htmlNode: anchorNode,
+				});
 			}
-			handleHeadingText({
-				htmlNode: anchorNode,
-			});
 		}
 	});
 

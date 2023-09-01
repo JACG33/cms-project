@@ -1,3 +1,5 @@
+export const IMG_PlACEHOLDER = "/img/placeholder.png";
+
 export const nullForm = {
 	id: "",
 	title: "",
@@ -5,7 +7,7 @@ export const nullForm = {
 	excerpt: "",
 	descrip: "<p></p>",
 	statuspost: "Borrador",
-	img: "http://localhost:5173/imgs/img5.jpg",
+	img: `http://localhost:5173${IMG_PlACEHOLDER}`,
 	categories: "",
 };
 
@@ -27,4 +29,3 @@ export const acceptedFiles = {
 
 export const API_URL = "http://localhost:3000/api/";
 
-export const IMG_PlACEHOLDER = "/img/placeholder.png";

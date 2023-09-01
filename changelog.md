@@ -1,5 +1,10 @@
 # CMS
 
+## Version 1.25.0
++ ### Client
++ Updated tool editor, now it is possible to choose two types of bold font, sematic bold and normal bold, but still having a problem, I will try to fix it maybe in the next changes.
++ Modified tool editor, separated some buttons into components.
+
 ## Version 1.2.1
 + ### Client
 + FormPost/Category, Bug fixed, when you create new post, in logic of category componet if not choice any categorie was executed timeout infinite, now is corrected.

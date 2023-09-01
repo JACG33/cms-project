@@ -1,5 +1,6 @@
 export const CheckIcon = () => (
 	<svg
+		role="CheckIcon"
 		xmlns="http://www.w3.org/2000/svg"
 		className="icon icon-tabler icon-tabler-check text-green-500"
 		width={"24"}
@@ -18,6 +19,7 @@ export const CheckIcon = () => (
 
 export const AlertIcon = () => (
 	<svg
+		role="AlertIcon"
 		xmlns="http://www.w3.org/2000/svg"
 		className="icon icon-tabler icon-tabler-alert-circle text-red-500"
 		width="24"
@@ -38,6 +40,7 @@ export const AlertIcon = () => (
 
 export const XIcon = () => (
 	<svg
+		role="XIcon"
 		xmlns="http://www.w3.org/2000/svg"
 		className="icon icon-tabler icon-tabler-circle-x"
 		width="24"
@@ -57,6 +60,7 @@ export const XIcon = () => (
 
 export const ArrowDown = () => (
 	<svg
+		role="ArrowDown"
 		xmlns="http://www.w3.org/2000/svg"
 		className="icon icon-tabler icon-tabler-chevron-down"
 		width="24"
@@ -70,5 +74,33 @@ export const ArrowDown = () => (
 	>
 		<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 		<path d="M6 9l6 6l6 -6" />
+	</svg>
+);
+
+export const Logo = ({ css, wid = 80, hei = 80 }) => (
+	<svg
+		role="Logo"
+		width={wid}
+		height={hei}
+		version="1.1"
+		viewBox="0 0 21.167 21.167"
+		xmlns="http://www.w3.org/2000/svg"
+		className={css}
+	>
+		<rect
+			x="-.0011849"
+			width="21.17"
+			height="21.17"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="5.2924"
+		/>
+		<path
+			d="m-0.0011849 1.0718 20.694 0.015448-20.209 9.5794 20.212 0.00855-20.22 9.5262"
+			fill="none"
+			stroke="#fff"
+			strokeLinejoin="bevel"
+			strokeWidth="2.117"
+		/>
 	</svg>
 );

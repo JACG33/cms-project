@@ -3,9 +3,26 @@
 }
 
 .tool__btn{
-  @apply transition-all px-2 py-1 bg-slate-400 hover:bg-slate-200 active:bg-slate-200 active:text-green-600 hover:text-green-600 text-gray-50 text-center rounded-md
+  @apply transition-all px-2 py-1 bg-slate-400 hover:bg-slate-200 active:bg-slate-200 active:text-green-600 hover:text-green-600 text-gray-50 text-center rounded-md cursor-pointer
 }
 
 .tool__btn--active{
   @apply bg-slate-200 text-green-600 
+}
+
+/* Wrapper Select Font */
+.tools__wrapper__select{
+  @apply grid relative
+}
+
+.tools__wrapper__select__items{
+  @apply grid absolute w-full -z-10 translate-y-0 transition-all bg-slate-400  rounded-md;
+  transform-origin: top;
+  scale: 1 0;
+}
+
+.tools__wrapper__select__items--show{
+  scale: 1 1;
+  translate: 0px 34px;
+  z-index: 2;
 }

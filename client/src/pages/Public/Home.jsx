@@ -8,7 +8,7 @@ const Home = () => {
   useEffect(() => {
     fetch(`${API_URL}posts`)
       .then((res) => res.json())
-      .then((res) => setPosts(res.data));
+      .then((res) => (res.message === "Sin posts" ? "" : setPosts(res.data)));
   }, []);
   return (
     <div className="posts__wrapper">
