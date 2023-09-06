@@ -1,5 +1,11 @@
 # CMS
 
+## Version 1.25.5
++ ### Client
++ Fixed/changes some parts and components.
++ ### Backend
++ Added Post Categories Model to group post by categories.
+
 ## Version 1.25.0
 + ### Client
 + Updated tool editor, now it is possible to choose two types of bold font, sematic bold and normal bold, but still having a problem, I will try to fix it maybe in the next changes.
