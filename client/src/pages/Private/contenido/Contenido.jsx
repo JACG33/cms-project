@@ -74,6 +74,11 @@ const Contenido = () => {
 						id={post.id}
 						statuspost={post.statuspost}
 						handleDelete={handleDelete}
+						categories={
+							post.categories !== ""
+								? Object.values(JSON.parse(post.categories))
+								: ""
+						}
 					/>
 				))
 			) : (

@@ -7,6 +7,7 @@ import Admin from "../pages/Private/Admin";
 import SectionUpload from "../pages/Private/uploads/SectionUpload";
 import Uploads from "../pages/Private/uploads/Uploads";
 import Home from "../pages/Public/Home";
+import PostByCategorie from "../pages/Public/PostByCategorie";
 import SinglePost from "../pages/Public/SinglePost";
 const Contenido = lazy(() => import("../pages/Private/contenido/Contenido"));
 const AddContenido = lazy(() =>
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
       {
         path: "/:id",
         element: <SinglePost />,
+      },
+      {
+        path: "/postbycategorie/:name",
+        element: <PostByCategorie />,
       },
     ],
   },

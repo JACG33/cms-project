@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_URL, FormCategories } from "../../../config/constans";
+import { EliminarAcentos } from "../../../helpers/strings";
 
 const Categories = () => {
   const [form, setForm] = useState(FormCategories);
@@ -9,7 +10,8 @@ const Categories = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const slug = value.trim().split(" ").join("-");
+    let slug = EliminarAcentos(value);
+    slug = slug.trim().split(" ").join("-");
     setForm({
       ...form,
       [name]: value,

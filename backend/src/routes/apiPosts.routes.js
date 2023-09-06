@@ -7,6 +7,8 @@ RouerApiPosts.get("/api/posts/", posts.GetPosts);
 
 RouerApiPosts.get("/api/posts/:id", posts.GetPost);
 
+RouerApiPosts.get("/api/postbycategorie/:id", posts.GetPostByCategorie);
+
 RouerApiPosts.post("/api/posts/", posts.CreatePost);
 
 RouerApiPosts.put("/api/posts/:id", posts.UpdatePost);

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL, Reg_Exp, nullForm } from "../../config/constans";
-import { SlugText } from "../../helpers/strings";
+import { EliminarAcentos, SlugText } from "../../helpers/strings";
 import { ModalForm } from "../Modals/Modal";
 import Toast from "../Notifications/Toast";
 import ToolsTextEditor from "../TextEditor/ToolsTextEditor";
@@ -54,7 +54,10 @@ const FormPost = ({ typeForm }) => {
 			...formPost,
 			[id]: value || innerHTML,
 			excerpt: id === "descrip" ? innerText.slice(0, 150) : formPost.excerpt,
-			slug: id === "title" ? SlugText({ text: value }) : formPost.slug,
+			slug:
+				id === "title"
+					? SlugText({ text: EliminarAcentos(value) })
+					: formPost.slug,
 		});
 	};
 

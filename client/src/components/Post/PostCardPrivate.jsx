@@ -8,6 +8,7 @@ const PostCardPrivate = ({
 	excerpt,
 	statuspost,
 	handleDelete,
+	categories = "",
 }) => {
 	return (
 		<>
@@ -22,9 +23,15 @@ const PostCardPrivate = ({
 					/>
 				)}
 				<div>
-					<h2>{statuspost}</h2>
-					<h1>{title}</h1>
+					<h3>{statuspost}</h3>
+					<h2>{title}</h2>
 					<p>{excerpt}</p>
+					{categories !== "" &&
+						categories.map((ele) => (
+							<a href={`/postbycategorie/${ele}`} target="_blank" className="btn" rel="noreferrer" key={ele}>
+								{ele}{" "}
+							</a>
+						))}
 					{id && (
 						<div className="flex gap-2 items-center justify-evenly">
 							<Link className="btn btn__edit" to={`/admin/editcontenido/${id}`}>

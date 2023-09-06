@@ -6,7 +6,7 @@ import ItemCategorie from "./form-item-button-cargorie";
 
 const FormCategori = ({ handleChange, categoriesData }) => {
 	const wrapperRef = useRef();
-	const catRef = useRef();
+	const catRef = useRef({});
 	const [categories, setCategories] = useState([]);
 
 	const handleClick = () => {
@@ -44,13 +44,11 @@ const FormCategori = ({ handleChange, categoriesData }) => {
 					setCategories(res.data);
 				});
 		}
-
-		const time = setTimeout(() => {
-			catRef.current = categoriesData;
-		}, 500);
-
-		return () => clearTimeout(time);
 	}, []);
+	
+	setTimeout(() => {
+		catRef.current = categoriesData;
+	}, 500);
 
 	return (
 		<div
