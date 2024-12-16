@@ -22,6 +22,7 @@ const PostByCategorie = () => {
 						excerpt={post.excerpt}
 						imgsrc={post.img}
 						id={post.id}
+						slug={post.slug}
 						categories={
 							post.categories !== ""
 								? Object.values(JSON.parse(post.categories))

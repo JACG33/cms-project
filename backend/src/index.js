@@ -2,14 +2,12 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 // Import Dependencies
 import cors from "cors";
-import { config } from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import RouterApiCategories from "./routes/apiCategories.routes.js";
 import RouerApiPosts from "./routes/apiPosts.routes.js";
 import RouterApiUploads from "./routes/apiUploads.routes.js";
 
-config({ path: "./.env" });
 
 // Define Variables
 const app = express();

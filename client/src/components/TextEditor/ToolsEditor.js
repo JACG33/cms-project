@@ -13,16 +13,16 @@ export const ToolsEditor = () => {
 	};
 
 	const findItems = () => {
-		if (basnd !== extnd) {
+		if (basnd.className !== extnd.className) {
 			const items = [];
 			let startPos;
 			let endPos;
 			childrenOfSelection.forEach((ele, inx) => {
-				if (ele.textContent === basnd.textContent) startPos = inx;
-				if (ele.textContent === extnd.textContent) endPos = inx;
+				if (ele.className === basnd.className) startPos = inx;
+				if (ele.className === extnd.className) endPos = inx;
 			});
 			childrenOfSelection.forEach((ele, ind) => {
-				if (ele.textContent === basnd.textContent) {
+				if (ele.className === basnd.className) {
 					items.push(ele);
 				}
 				if (
@@ -31,7 +31,7 @@ export const ToolsEditor = () => {
 				) {
 					items.push(ele);
 				}
-				if (ele.textContent === extnd.textContent) {
+				if (ele.className === extnd.className) {
 					items.push(ele);
 				}
 			});
@@ -98,7 +98,13 @@ export const ToolsEditor = () => {
 
 	const cleanEmptyTag = ({ elementToClean }) => {
 		document.querySelectorAll(elementToClean).forEach((ele) => {
-			if (ele.innerText === "" || ele.innerText === " ") ele.remove();
+			if (ele.innerText === "") {
+				ele.remove();
+			}
+			if (ele.innerText === " ") {
+				const text = document.createTextNode(" ");
+				ele.replaceWith(text);
+			}
 		});
 	};
 
@@ -106,6 +112,28 @@ export const ToolsEditor = () => {
 		const find = findItems();
 		find.forEach((ele, index) => {
 			const pTag = goToParent({ element: ele });
+			const pTagChildNodes = pTag.childNodes;
+			if (
+				style === "b" &&
+				pTag.innerHTML.match(`<strong>${textSelec[index]}</strong>`)
+			) {
+				pTag.innerHTML = pTag.innerHTML.replace(
+					`<strong>${textSelec[index]}</strong>`,
+					`<b>${textSelec[index]}</b>`,
+				);
+				return;
+			}
+			if (
+				style === "strong" &&
+				pTag.innerHTML.match(`<b>${textSelec[index]}</b>`)
+			) {
+				pTag.innerHTML = pTag.innerHTML.replace(
+					`<b>${textSelec[index]}</b>`,
+					`<strong>${textSelec[index]}</strong>`,
+				);
+				return;
+			}
+
 			if (
 				pTag.innerHTML.match(
 					`<${FONT_STYLES[style]}>${textSelec[index]}</${FONT_STYLES[style]}>`,
@@ -124,6 +152,21 @@ export const ToolsEditor = () => {
 					);
 				}
 			} else {
+				pTagChildNodes.forEach((ele) => {
+					if (ele?.nextSibling?.localName === FONT_STYLES[style]) {
+						ele.nextSibling.outerHTML = ele.nextSibling.outerHTML.replace(
+							`<${FONT_STYLES[style]}>`,
+							"",
+						);
+					}
+					if (ele?.previousSibling?.localName === FONT_STYLES[style]) {
+						ele.previousSibling.outerHTML =
+							ele.previousSibling.outerHTML.replace(
+								`</${FONT_STYLES[style]}>`,
+								"",
+							);
+					}
+				});
 				pTag.innerHTML = pTag.innerHTML.replace(
 					textSelec[index],
 					`<${FONT_STYLES[style]}>${textSelec[index]}</${FONT_STYLES[style]}>`,
@@ -220,6 +263,8 @@ export const ToolsEditor = () => {
 			) {
 				basnd = anchorNode;
 				extnd = focusNode;
+				basnd.className = "star";
+				extnd.className = "end";
 
 				const wrapperChilds = window
 					.getSelection()

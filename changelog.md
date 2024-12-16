@@ -1,5 +1,8 @@
 # CMS
 
+## Version 1.25.8
++ Simple change
+
 ## Version 1.25.5
 + ### Client
 + Fixed/changes some parts and components.

@@ -41,7 +41,8 @@ const FormCategori = ({ handleChange, categoriesData }) => {
 			fetch(`${API_URL}categories`)
 				.then((res) => res.json())
 				.then((res) => {
-					setCategories(res.data);
+					console.log(res.data);
+					setCategories(res.data||[]);
 				});
 		}
 	}, []);
